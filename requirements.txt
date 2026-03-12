@@ -1,5 +1,5 @@
 streamlit
-openai-whisper
-torch
+openai
+pandas
+python-dotenv
 ffmpeg-python
-
