@@ -12,7 +12,6 @@ uploaded_file = st.file_uploader("Upload meeting audio", type=["wav","mp3","m4a"
 
 
 
-model = whisper.load_model("base")
 
 def transcribe_audio(file_path):
     result = model.transcribe(file_path)
