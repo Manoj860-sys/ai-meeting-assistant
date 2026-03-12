@@ -10,7 +10,7 @@ st.write("Upload meeting audio to generate transcript, summary, and action items
 
 uploaded_file = st.file_uploader("Upload meeting audio", type=["wav","mp3","m4a","ogg","opus"])
 
-import whisper
+
 
 model = whisper.load_model("base")
 
