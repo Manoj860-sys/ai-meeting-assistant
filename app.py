@@ -3,6 +3,7 @@ import tempfile
 import whisper
 import smtplib
 from email.mime.text import MIMEText
+from twilio.rest import Client
 
 
 # ---------------- EMAIL FUNCTION ----------------
@@ -21,6 +22,26 @@ def send_email(reminders, receiver_email):
     server.login(sender_email, sender_password)
     server.sendmail(sender_email, receiver_email, message.as_string())
     server.quit()
+
+
+# ---------------- WHATSAPP FUNCTION ----------------
+
+def send_whatsapp(reminders, phone_number):
+
+    account_sid = "ACeebcccabe2a46c24ea0aacb964ca8104"
+    auth_token = "b9437c029044623d27176cc04cbf5c00"
+
+    client = Client(account_sid, auth_token)
+
+    message_body = "\n".join(reminders)
+
+    message = client.messages.create(
+        body=message_body,
+        from_="whatsapp:+14155238886",
+        to=f"whatsapp:{phone_number}"
+    )
+
+    return message.sid
 
 
 # ---------------- REMINDER DETECTION ----------------
@@ -116,8 +137,8 @@ if uploaded_file is not None:
     st.write(transcript)
 
     reminders = extract_reminders(transcript)
-
     summary, actions, decisions = analyze_transcript(transcript)
+
 
     # ---------------- REMINDERS ----------------
 
@@ -128,12 +149,18 @@ if uploaded_file is not None:
         for r in reminders:
             st.write("•", r)
 
+        # EMAIL BUTTON
         if user_email:
             if st.button("Send Reminder Email"):
-
                 send_email(reminders, user_email)
-
                 st.success("Reminder email sent successfully!")
+
+        # WHATSAPP BUTTON
+        if user_phone:
+            if st.button("Send WhatsApp Reminder"):
+                send_whatsapp(reminders, user_phone)
+                st.success("WhatsApp reminder sent successfully!")
+
 
     # ---------------- SUMMARY (ALWAYS SHOW) ----------------
 
@@ -145,19 +172,17 @@ if uploaded_file is not None:
         st.write("No summary detected.")
 
 
-    # ---------------- ACTION ITEMS (ONLY IF EXISTS) ----------------
+    # ---------------- ACTION ITEMS ----------------
 
     if actions:
         st.subheader("✅ Action Items")
-
         for action in actions:
             st.write("-", action)
 
 
-    # ---------------- DECISIONS (ONLY IF EXISTS) ----------------
+    # ---------------- DECISIONS ----------------
 
     if decisions:
         st.subheader("📊 Decisions")
-
         for decision in decisions:
             st.write("-", decision)
