@@ -11,7 +11,7 @@ from twilio.rest import Client
 def send_email(reminders, receiver_email):
 
     sender_email = "manojingalagi81@gmail.com"
-    sender_password = "oxav czjq psxz wjrv"
+    sender_password = "YOUR_GMAIL_APP_PASSWORD"
 
     message = MIMEText("\n".join(reminders))
     message["Subject"] = "Meeting Reminder"
@@ -25,7 +25,6 @@ def send_email(reminders, receiver_email):
 
 
 # ---------------- WHATSAPP FUNCTION ----------------
-from twilio.rest import Client
 
 def send_whatsapp(reminders, phone_number):
 
@@ -43,7 +42,6 @@ def send_whatsapp(reminders, phone_number):
     )
 
     return message.sid
-
 
 
 # ---------------- REMINDER DETECTION ----------------
@@ -141,7 +139,6 @@ if uploaded_file is not None:
     reminders = extract_reminders(transcript)
     summary, actions, decisions = analyze_transcript(transcript)
 
-
     # ---------------- REMINDERS ----------------
 
     if reminders:
@@ -158,15 +155,15 @@ if uploaded_file is not None:
                 st.success("Reminder email sent successfully!")
 
         # WHATSAPP BUTTON
-       if user_phone:
-    if st.button("Send WhatsApp Reminder"):
+        if user_phone:
+            if st.button("Send WhatsApp Reminder"):
 
-        try:
-            send_whatsapp(reminders, user_phone)
-            st.success("WhatsApp reminder sent successfully!")
+                try:
+                    send_whatsapp(reminders, user_phone)
+                    st.success("WhatsApp reminder sent successfully!")
 
-        except Exception as e:
-            st.error("WhatsApp sending failed. Check sandbox connection.")
+                except Exception as e:
+                    st.error("WhatsApp sending failed. Check sandbox connection.")
 
 
     # ---------------- SUMMARY (ALWAYS SHOW) ----------------
