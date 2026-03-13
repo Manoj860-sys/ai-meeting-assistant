@@ -136,9 +136,9 @@ if uploaded_file is not None:
 
     summary, actions, decisions = analyze_transcript(transcript)
 
-    if summary:
+if summary:
     st.subheader("📌 Summary")
-    st.write(summary)
+    st.write(summary)    
 
 if actions:
     st.subheader("✅ Action Items")
