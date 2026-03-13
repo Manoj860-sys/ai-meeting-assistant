@@ -11,7 +11,7 @@ from twilio.rest import Client
 def send_email(reminders, receiver_email):
 
     sender_email = "manojingalagi81@gmail.com"
-    sender_password = "YOUR_GMAIL_APP_PASSWORD"
+    sender_password = "dkmc nzbe whst vxoo"
 
     message = MIMEText("\n".join(reminders))
     message["Subject"] = "Meeting Reminder"
