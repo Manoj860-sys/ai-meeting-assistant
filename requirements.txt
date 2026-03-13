@@ -2,4 +2,3 @@ streamlit
 openai-whisper
 torch
 ffmpeg-python
-twilio
