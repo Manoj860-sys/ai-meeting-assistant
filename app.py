@@ -75,23 +75,31 @@ def transcribe_audio(file_path):
 
 
 # ---------------- ANALYSIS FUNCTION ----------------
-
 def analyze_transcript(text):
 
-    summary = "Team discussed progress of the project, upcoming deadlines, and UI improvements."
+    sentences = text.split(".")
 
-    actions = [
-        "Manoj: Prepare UI prototype by Friday",
-        "Rahul: Implement backend API",
-        "Team: Review design in next meeting"
-    ]
+    actions = []
+    decisions = []
+    summary_sentences = []
 
-    decisions = [
-        "Use React for frontend",
-        "Deploy prototype before demo day"
-    ]
+    for s in sentences:
+
+        s = s.strip()
+
+        if any(word in s.lower() for word in ["will", "prepare", "submit", "complete", "implement"]):
+            actions.append(s)
+
+        elif any(word in s.lower() for word in ["decided", "decision", "agree", "approved"]):
+            decisions.append(s)
+
+        else:
+            summary_sentences.append(s)
+
+    summary = ". ".join(summary_sentences[:3])
 
     return summary, actions, decisions
+
 
 
 # ---------------- MAIN PROCESS ----------------
@@ -128,13 +136,16 @@ if uploaded_file is not None:
 
     summary, actions, decisions = analyze_transcript(transcript)
 
+    if summary:
     st.subheader("📌 Summary")
     st.write(summary)
 
+if actions:
     st.subheader("✅ Action Items")
     for action in actions:
         st.write("-", action)
 
+if decisions:
     st.subheader("📊 Decisions")
     for decision in decisions:
         st.write("-", decision)
