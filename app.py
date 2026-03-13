@@ -1,6 +1,5 @@
 import streamlit as st
 import tempfile
-import os
 import whisper
 import smtplib
 from email.mime.text import MIMEText
@@ -31,7 +30,6 @@ def extract_reminders(text):
     keywords = ["remind", "deadline", "tomorrow", "submit", "task", "meeting", "call"]
 
     reminders = []
-
     sentences = text.split(".")
 
     for sentence in sentences:
@@ -40,6 +38,34 @@ def extract_reminders(text):
                 reminders.append(sentence.strip())
 
     return reminders
+
+
+# ---------------- ANALYSIS FUNCTION ----------------
+
+def analyze_transcript(text):
+
+    sentences = text.split(".")
+
+    actions = []
+    decisions = []
+    summary_sentences = []
+
+    for s in sentences:
+
+        s = s.strip()
+
+        if any(word in s.lower() for word in ["will", "prepare", "submit", "complete", "implement"]):
+            actions.append(s)
+
+        elif any(word in s.lower() for word in ["decided", "decision", "agree", "approved"]):
+            decisions.append(s)
+
+        else:
+            summary_sentences.append(s)
+
+    summary = ". ".join(summary_sentences[:3])
+
+    return summary, actions, decisions
 
 
 # ---------------- PAGE CONFIG ----------------
@@ -74,34 +100,6 @@ def transcribe_audio(file_path):
     return result["text"]
 
 
-# ---------------- ANALYSIS FUNCTION ----------------
-def analyze_transcript(text):
-
-    sentences = text.split(".")
-
-    actions = []
-    decisions = []
-    summary_sentences = []
-
-    for s in sentences:
-
-        s = s.strip()
-
-        if any(word in s.lower() for word in ["will", "prepare", "submit", "complete", "implement"]):
-            actions.append(s)
-
-        elif any(word in s.lower() for word in ["decided", "decision", "agree", "approved"]):
-            decisions.append(s)
-
-        else:
-            summary_sentences.append(s)
-
-    summary = ". ".join(summary_sentences[:3])
-
-    return summary, actions, decisions
-
-
-
 # ---------------- MAIN PROCESS ----------------
 
 if uploaded_file is not None:
@@ -119,6 +117,10 @@ if uploaded_file is not None:
 
     reminders = extract_reminders(transcript)
 
+    summary, actions, decisions = analyze_transcript(transcript)
+
+    # ---------------- REMINDERS ----------------
+
     if reminders:
 
         st.subheader("🔔 Detected Reminders")
@@ -126,7 +128,6 @@ if uploaded_file is not None:
         for r in reminders:
             st.write("•", r)
 
-        # EMAIL BUTTON
         if user_email:
             if st.button("Send Reminder Email"):
 
@@ -134,18 +135,29 @@ if uploaded_file is not None:
 
                 st.success("Reminder email sent successfully!")
 
-    summary, actions, decisions = analyze_transcript(transcript)
+    # ---------------- SUMMARY (ALWAYS SHOW) ----------------
 
-if summary:
     st.subheader("📌 Summary")
-    st.write(summary)    
 
-if actions:
-    st.subheader("✅ Action Items")
-    for action in actions:
-        st.write("-", action)
+    if summary:
+        st.write(summary)
+    else:
+        st.write("No summary detected.")
 
-if decisions:
-    st.subheader("📊 Decisions")
-    for decision in decisions:
-        st.write("-", decision)
+
+    # ---------------- ACTION ITEMS (ONLY IF EXISTS) ----------------
+
+    if actions:
+        st.subheader("✅ Action Items")
+
+        for action in actions:
+            st.write("-", action)
+
+
+    # ---------------- DECISIONS (ONLY IF EXISTS) ----------------
+
+    if decisions:
+        st.subheader("📊 Decisions")
+
+        for decision in decisions:
+            st.write("-", decision)
