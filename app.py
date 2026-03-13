@@ -25,15 +25,19 @@ def send_email(reminders, receiver_email):
 
 
 # ---------------- WHATSAPP FUNCTION ----------------
+from twilio.rest import Client
 
 def send_whatsapp(reminders, phone_number):
 
-    account_sid = "ACeebcccabe2a46c24ea0aacb964ca8104"
-    auth_token = "b9437c029044623d27176cc04cbf5c00"
+    account_sid = "YOUR_ACCOUNT_SID"
+    auth_token = "YOUR_AUTH_TOKEN"
 
     client = Client(account_sid, auth_token)
 
     message_body = "\n".join(reminders)
+
+    # remove spaces from phone number
+    phone_number = phone_number.replace(" ", "")
 
     message = client.messages.create(
         body=message_body,
@@ -42,6 +46,7 @@ def send_whatsapp(reminders, phone_number):
     )
 
     return message.sid
+
 
 
 # ---------------- REMINDER DETECTION ----------------
