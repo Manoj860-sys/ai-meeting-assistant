@@ -25,6 +25,7 @@ def send_email(reminders, receiver_email):
 
 
 # ---------------- WHATSAPP FUNCTION ----------------
+from twilio.rest import Client
 
 def send_whatsapp(reminders, phone_number):
 
@@ -38,10 +39,11 @@ def send_whatsapp(reminders, phone_number):
     message = client.messages.create(
         body=message_body,
         from_="whatsapp:+14155238886",
-        to=f"whatsapp:{phone_number}"
+        to="whatsapp:" + phone_number
     )
 
     return message.sid
+
 
 
 # ---------------- REMINDER DETECTION ----------------
@@ -156,10 +158,15 @@ if uploaded_file is not None:
                 st.success("Reminder email sent successfully!")
 
         # WHATSAPP BUTTON
-        if user_phone:
-            if st.button("Send WhatsApp Reminder"):
-                send_whatsapp(reminders, user_phone)
-                st.success("WhatsApp reminder sent successfully!")
+       if user_phone:
+    if st.button("Send WhatsApp Reminder"):
+
+        try:
+            send_whatsapp(reminders, user_phone)
+            st.success("WhatsApp reminder sent successfully!")
+
+        except Exception as e:
+            st.error("WhatsApp sending failed. Check sandbox connection.")
 
 
     # ---------------- SUMMARY (ALWAYS SHOW) ----------------
