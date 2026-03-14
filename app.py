@@ -13,7 +13,7 @@ def send_email(reminders, receiver_email):
     sender_email = "manojingalagi81@gmail.com"
 
     # PASTE YOUR GMAIL APP PASSWORD HERE (REMOVE SPACES)
-    sender_password = "oxavczją psxzwjrv"
+    sender_password = "oxavczjąpsxzwjrv"
 
     message = MIMEText("\n".join(reminders))
     message["Subject"] = "Meeting Reminder"
