@@ -159,16 +159,17 @@ if uploaded_file is not None:
                 send_email(reminders, user_email)
                 st.success("Reminder email sent successfully!")
 
-        # WHATSAPP BUTTON
-        if user_phone:
-            if st.button("Send WhatsApp Reminder"):
+       
+# WHATSAPP BUTTON
+if user_phone:
+    if st.button("Send WhatsApp Reminder"):
+        try:
+            send_whatsapp(reminders, user_phone)
+            st.success("WhatsApp reminder sent successfully!")
+        except:
+            st.success("WhatsApp notification ready. For full functionality please add credits to Twilio account.")
 
-                try:
-                    send_whatsapp(reminders, user_phone)
-                    st.success("WhatsApp reminder sent successfully!")
-
-                except Exception as e:
-                st.success("WhatsApp notification ready. For full functionality please add credits to Twilio account.")
+               
 
     # ---------------- SUMMARY (ALWAYS SHOW) ----------------
 
