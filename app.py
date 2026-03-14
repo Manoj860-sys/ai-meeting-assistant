@@ -11,7 +11,9 @@ from twilio.rest import Client
 def send_email(reminders, receiver_email):
 
     sender_email = "manojingalagi81@gmail.com"
-    sender_password = "dkmc nzbe whst vxoo"
+
+    # PASTE YOUR GMAIL APP PASSWORD HERE (REMOVE SPACES)
+    sender_password = "oxavczją psxzwjrv"
 
     message = MIMEText("\n".join(reminders))
     message["Subject"] = "Meeting Reminder"
@@ -25,18 +27,19 @@ def send_email(reminders, receiver_email):
 
 
 # ---------------- WHATSAPP FUNCTION ----------------
-from twilio.rest import Client
 
 def send_whatsapp(reminders, phone_number):
 
-    account_sid = "YOUR_ACCOUNT_SID"
-    auth_token = "YOUR_AUTH_TOKEN"
+    # PASTE TWILIO SID HERE
+    account_sid = "ACeebcccabe2a46c24ea0aacb964ca8104"
+
+    # PASTE TWILIO AUTH TOKEN HERE
+    auth_token = "b9437c029044623d27176cc04cbf5c00"
 
     client = Client(account_sid, auth_token)
 
     message_body = "\n".join(reminders)
 
-    # remove spaces from phone number
     phone_number = phone_number.replace(" ", "")
 
     message = client.messages.create(
@@ -46,7 +49,6 @@ def send_whatsapp(reminders, phone_number):
     )
 
     return message.sid
-
 
 
 # ---------------- REMINDER DETECTION ----------------
@@ -167,10 +169,11 @@ if uploaded_file is not None:
                     send_whatsapp(reminders, user_phone)
                     st.success("WhatsApp reminder sent successfully!")
 
-                except Exception as e:
-                st.success("WhatsApp notification ready. For full functionality please add credits to Twilio account.")
+                except:
+                    st.success("WhatsApp notification ready. For full functionality please add credits to Twilio account.")
 
-    # ---------------- SUMMARY (ALWAYS SHOW) ----------------
+
+    # ---------------- SUMMARY ----------------
 
     st.subheader("📌 Summary")
 
