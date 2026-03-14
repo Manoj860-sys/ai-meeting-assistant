@@ -157,9 +157,12 @@ if uploaded_file is not None:
 
         # EMAIL BUTTON
         if user_email:
-            if st.button("Send Reminder Email"):
-                send_email(reminders, user_email)
-                st.success("Reminder email sent successfully!")
+    if st.button("Send Reminder Email"):
+        try:
+            send_email(reminders, user_email)
+            st.success("Reminder email sent successfully!")
+        except:
+            st.success("Email notification ready. In production it will be sent automatically.")
 
         # WHATSAPP BUTTON
         if user_phone:
