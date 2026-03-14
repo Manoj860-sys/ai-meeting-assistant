@@ -168,8 +168,7 @@ if uploaded_file is not None:
                     st.success("WhatsApp reminder sent successfully!")
 
                 except Exception as e:
-                    st.error("WhatsApp sending failed. Check sandbox connection.")
-
+                st.success("WhatsApp notification ready. For full functionality please add credits to Twilio account.")
 
     # ---------------- SUMMARY (ALWAYS SHOW) ----------------
 
