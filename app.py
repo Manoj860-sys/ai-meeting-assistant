@@ -194,4 +194,4 @@ if user_phone:
     if decisions:
         st.subheader("📊 Decisions")
         for decision in decisions:
-            st.write("-", decision).    give correct code and tell me where to fill the passworeds and sid etc
+            st.write("-", decision)
